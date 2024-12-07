@@ -1,0 +1,22 @@
+# Dockerfile para C4
+FROM ubuntu:22.04
+
+# Actualizar paquetes y configurar OpenSSH
+RUN apt-get update && apt-get install -y openssh-client openssh-server && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y tcpdump
+
+
+
+# Crear usuario "prueba" con contraseña "prueba"
+RUN useradd -m -s /bin/bash prueba && echo "prueba:prueba" | chpasswd
+
+RUN mkdir /var/run/sshd && \
+    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
+    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+
+# Exponer el puerto SSH
+EXPOSE 22
+
+# Iniciar el servicio SSH
+CMD ["/usr/sbin/sshd", "-D"]

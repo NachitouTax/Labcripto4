@@ -1,0 +1,17 @@
+# Dockerfile para C3
+FROM ubuntu:20.10
+
+# Cambiar los repositorios a old-releases
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list && \
+    sed -i 's|http://archive.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list
+
+# Actualizar repositorios e instalar openssh-client
+RUN apt-get update && apt-get install -y openssh-client && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+RUN apt update && apt install -y iputils-ping
+
+
+
+CMD ["bash"]
